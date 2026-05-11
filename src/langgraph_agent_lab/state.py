@@ -1,14 +1,11 @@
-"""State schema for the Day 08 LangGraph lab.
-
-Students should extend the schema only when needed. Keep state lean and serializable.
-"""
+"""State schema for the Day 08 LangGraph lab."""
 
 from __future__ import annotations
 
 from enum import StrEnum
+from operator import add
 from typing import Annotated, Any, TypedDict
 
-from operator import add
 from pydantic import BaseModel, Field, field_validator
 
 
@@ -39,17 +36,15 @@ class ApprovalDecision(BaseModel):
 
 
 class AgentState(TypedDict, total=False):
-    """LangGraph state.
-
-    TODO(student): decide which fields should be append-only and which should be overwritten.
-    The current annotations give a safe starting point for auditability.
-    """
+    """LangGraph state."""
 
     thread_id: str
     scenario_id: str
     query: str
     route: str
     risk_level: str
+    requires_approval: bool
+    should_retry: bool
     attempt: int
     max_attempts: int
     final_answer: str | None
@@ -88,6 +83,8 @@ def initial_state(scenario: Scenario) -> AgentState:
         "query": scenario.query,
         "route": "",
         "risk_level": "unknown",
+        "requires_approval": scenario.requires_approval,
+        "should_retry": scenario.should_retry,
         "attempt": 0,
         "max_attempts": scenario.max_attempts,
         "final_answer": None,

@@ -1,8 +1,4 @@
-"""Graph construction.
-
-This module is intentionally import-safe. It imports LangGraph only inside the builder so unit tests
-that check schema/metrics can run even if students are still debugging graph wiring.
-"""
+"""Graph construction."""
 
 from __future__ import annotations
 
@@ -26,17 +22,6 @@ from .state import AgentState
 
 
 def build_graph(checkpointer: Any | None = None):
-    """Build and compile the LangGraph workflow.
-
-    TODO(student): review the architecture and modify nodes/edges only with a clear reason.
-    Required behaviors:
-    - intake -> classify (normalization + routing)
-    - classify routes to answer/tool/clarify/risky/retry
-    - tool -> evaluate creates the retry loop (slide: "done?" check)
-    - risky path requires approval before tool/action
-    - retry loop bounded by max_attempts -> dead_letter on exhaustion
-    - all paths eventually reach finalize -> END
-    """
     try:
         from langgraph.graph import END, START, StateGraph
     except Exception as exc:  # pragma: no cover - helpful install error
